@@ -210,7 +210,23 @@ def decompose(grid, p_face, e_face, p_cell, tol_density=1e-8, solver="direct"):
     g_full[act_face] = gf
     r_full[act_face] = rf
 
+    # cell-centred potential on the FULL grid, with inactive cells filled by
+    # nearest-active-neighbour so that a spline of phi has no artificial jump.
+    # Returning phi (rather than only the face gradients) lets callers build a
+    # smooth grad(phi) and recover r = e - grad(phi) with e evaluated EXACTLY,
+    # so that the two components sum to e by construction.
+    phi_full = np.zeros(grid.ncell)
+    phi_full[act_idx] = phi
+    if not act_cell.all():
+        from scipy import ndimage
+        mask2d = act_cell.reshape(N, N)
+        idx = ndimage.distance_transform_edt(~mask2d, return_distances=False,
+                                             return_indices=True)
+        phi2d = phi_full.reshape(N, N)
+        phi_full = phi2d[tuple(idx)].ravel()
+
     return dict(
+        phi_cell=phi_full, active_cell=act_cell,
         f=r2 / e2 if e2 > 0 else float("nan"),
         e2=e2, g2=g2, r2=r2, ortho=ortho, closure=closure,
         g_face=g_full, r_face=r_full, active_face=act_face,

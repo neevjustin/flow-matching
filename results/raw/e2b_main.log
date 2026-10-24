@@ -1,0 +1,35 @@
+output: /workshop/src/../results/raw/e2b_main
+config: {'src': 'e1_main', 'tag': 'main', 'dataset': 'ring8', 'seeds': [0, 1, 2], 'width': 128, 'depth': 3, 'grid_N': 256, 'n_t': 33, 'n_map': 3000, 'n_kl': 1200, 'kl_steps': 100}
+ground truth ...
+  ED floor = -1.504e-03 +- 3.149e-03
+  ED star  = -2.054e-03 +- 2.997e-03
+  KL star  = 0.00000 +- 0.00000
+
+=== seed 0 ===
+  grid f = 0.1296  (12s, N=256, 33 slices)
+  P4: MC f(spline split) = 0.1326 vs grid 0.1296 -> OK
+  integrated null  nfev=3782 (116s)
+  integrated grad  nfev=6434 (47s)
+  theta: M=0.0199 rms=0.0923 p99=0.1550 max=1.505 | flip=0.533% occTV=0.0023 | ED=-1.999e-03+-3.0e-03 | KL=0.01820+-0.00864
+  grad : M=0.0176 rms=0.0826 p99=0.1350 max=1.484 | flip=0.500% occTV=0.0020 | ED=-2.060e-03+-3.0e-03 | KL=0.16726+-0.01483
+  null : M=0.0102 rms=0.0718 p99=0.0766 max=1.699 | flip=0.333% occTV=0.0017 | ED=-1.981e-03+-3.0e-03 | KL=-0.00688+-0.00400
+
+=== seed 1 ===
+  grid f = 0.1778  (12s, N=256, 33 slices)
+  P4: MC f(spline split) = 0.1796 vs grid 0.1778 -> OK
+  integrated null  nfev=2474 (77s)
+  integrated grad  nfev=6404 (47s)
+  theta: M=0.0231 rms=0.1105 p99=0.3261 max=1.619 | flip=0.667% occTV=0.0037 | ED=-2.059e-03+-3.0e-03 | KL=0.02188+-0.00881
+  grad : M=0.0213 rms=0.1020 p99=0.3019 max=1.520 | flip=0.600% occTV=0.0033 | ED=-2.038e-03+-3.0e-03 | KL=0.11932+-0.01242
+  null : M=0.0110 rms=0.0753 p99=0.0603 max=1.524 | flip=0.333% occTV=0.0017 | ED=-2.061e-03+-3.0e-03 | KL=-0.00364+-0.00149
+
+=== seed 2 ===
+  grid f = 0.1000  (12s, N=256, 33 slices)
+  P4: MC f(spline split) = 0.1013 vs grid 0.1000 -> OK
+  integrated null  nfev=2480 (77s)
+  integrated grad  nfev=6812 (50s)
+  theta: M=0.0185 rms=0.0808 p99=0.1566 max=1.567 | flip=0.400% occTV=0.0010 | ED=-2.022e-03+-3.0e-03 | KL=0.01494+-0.00889
+  grad : M=0.0176 rms=0.0784 p99=0.1901 max=1.532 | flip=0.400% occTV=0.0020 | ED=-2.032e-03+-3.0e-03 | KL=0.15700+-0.01675
+  null : M=0.0106 rms=0.0700 p99=0.0671 max=1.389 | flip=0.267% occTV=0.0013 | ED=-2.020e-03+-3.0e-03 | KL=-0.00309+-0.00157
+
+written: /workshop/src/../results/raw/e2b_main/metrics.json

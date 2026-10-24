@@ -1,0 +1,18 @@
+output: /workshop/src/../results/raw/e3_main
+config: {'tag': 'main', 'dataset': 'ring8', 'n_seeds': 4, 'steps': 20000, 'width': 128, 'depth': 3, 'batch': 2048, 'lr': 0.002, 'grid_N': 192, 'n_map': 3000, 'n_kl': 2000, 'arms': ['velocity', 'potential']}
+ground truth map ...
+  energy-distance floor = 3.1075e-03;  Phi* = -6.2124e-04
+
+=== arch=velocity seed=0 ===
+  params=37890  train=192s  eta_rel=0.0163  f=0.12663  M=0.02001
+  ed=-6.4728e-04 (floor 3.1075e-03, star -6.2124e-04)  w2=0.4011  KL=0.01831 +- 0.00691
+
+=== arch=velocity seed=1 ===
+  params=37890  train=183s  eta_rel=0.0165  f=0.17613  M=0.02521
+  ed=-3.8551e-04 (floor 3.1075e-03, star -6.2124e-04)  w2=0.4143  KL=0.033 +- 0.00823
+
+=== arch=velocity seed=2 ===
+  params=37890  train=186s  eta_rel=0.0181  f=0.09197  M=0.02326
+  ed=-6.0701e-04 (floor 3.1075e-03, star -6.2124e-04)  w2=0.3982  KL=0.02475 +- 0.00845
+
+=== arch=velocity seed=3 ===

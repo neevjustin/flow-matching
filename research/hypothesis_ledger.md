@@ -282,3 +282,73 @@ between `rtol = 1e-5` and `1e-10`.
 | Date | Exp ID | Hypothesis | Outcome | Ledger effect |
 |---|---|---|---|---|
 | 2026-10-24 | — | H1–H4 declared | pre-registered | opened |
+
+---
+
+## 5. VERDICTS (2026-10-24, after E0/E1/E2b)
+
+### H4 (gate) — **REFUTED as an explanation, i.e. GATE PASSED**
+`M` changes by 0.01 % between `rtol = 10⁻⁵` and `10⁻⁹` (0.01966 → 0.01966), as does the
+between-seed map disagreement. Threshold was < 10 %. The observed trajectory differences
+are properties of the learned fields, not of the integrator. Phase-7 stop criterion
+"effect disappears with correct numerical integration" does **not** trigger.
+
+### H1 — **FALSIFIED, in the direction opposite to the hypothesis**
+H1 predicted `f > f₀ + 0.05`: that networks preferentially err in marginal-preserving
+directions. Measured `f = 0.1402 ± 0.0319` against a properly matched null
+`f₀ = 0.7201 ± 0.0367` (`p = 1.3×10⁻¹⁴`). So networks err **overwhelmingly in
+marginal-CHANGING directions** — they largely inherit the exact curl-free structure of the
+target. Confirmed independently and grid-free by the Jacobian asymmetry
+`κ = 0.0304 ± 0.0041` for trained nets vs `0.803 ± 0.336` at random init (`κ(v*) = 0`).
+
+**Pre-registration failure, declared.** Against the *pre-registered* null (`null_init`,
+randomly-initialised nets) the criterion is formally met (`f − f₀ = +0.135`,
+`p = 2.7×10⁻⁶`). We do **not** claim H1 as supported on that basis, because post-hoc
+diagnosis shows `null_init` is degenerate: the constant (bias) component of a
+randomly-initialised net carries 89–99.5 % of its field energy, and a constant field is a
+trivial gradient. The null therefore measured the wrong thing. This is recorded as a
+**failure of our pre-registered null design**, not as a positive result. The two matched
+nulls (which preserve the measured residual's magnitude field, spectrum and energy exactly
+and randomise only direction) are the ones we interpret. Lesson: a null model must be
+validated for non-degeneracy *before* the decisive run, exactly as the measurement
+instruments were in E0.
+
+**This falsifies the brief's starting hypothesis in its strong form.** Learned
+flow-matching models do not exploit the velocity-field freedom; they suppress it by a
+factor of ~5 in energy (~26× in local rotationality) relative to chance.
+
+### H2 — **SUPPORTED, with a narrower claim than pre-registered**
+The pre-registered `W₂`-based test (`R ≥ 3`) was **not evaluable**: `W₂` at `n = 4000` in
+2-D cannot resolve even the ground-truth map (`W₂(Φ*#p₀,p₁) = 0.387` exceeds the
+two-sample floor 0.367). Re-run with a validated KL instrument (resolves 10⁻⁷ nats;
+reads exactly 0 on the true field), E2b shows: injecting the *measured* flux-null
+component of a *trained* net's error into the true field gives `|KL| ≤ 0.007`
+(indistinguishable from the true field, 4× below the full model's own 0.018) while
+`M = 0.0106 ± 0.0004`, worst-particle displacement up to 42 % of the data radius, and
+**0.31 % of samples re-routed to a different mode** at essentially unchanged mode occupancy.
+
+**Scope restriction imposed by the evidence.** The components do **not** act additively on
+the marginals (`KL(Φ_∇φ) = 0.148`, 8× the full model's — because `r` is flux-null w.r.t.
+`p_t`, not w.r.t. the path `v* + ∇φ` generates). We therefore may **not** claim "a
+fraction `f` of the model's map error is invisible". The supported claim is only the
+injection claim above.
+
+### H3 — **not run.** Deferred as planned, and now largely moot: H1's falsification means
+divergence alignment is not the interesting lever. Recorded as open.
+
+### New hypothesis adopted post hoc and tested (E3): curl-free parameterisation
+Because `v*` is exactly a gradient, `v_θ = ∇Ψ_θ` is a zero-bias restriction. Pre-registered
+predictions Q1–Q4 are in `src/e3_curlfree.py`. **Flagged as post-hoc**: it was motivated by
+a mid-project measurement, not declared in §3, and the architecture itself is prior work
+(Action Matching; Energy Matching). Only the measurement is ours.
+
+## 6. Running record (updated)
+
+| Date | Exp ID | Hypothesis | Outcome | Ledger effect |
+|---|---|---|---|---|
+| 2026-10-24 | — | H1–H4 declared | pre-registered | opened |
+| 2026-10-24 | E0 | infrastructure | 25/25 pass; mechanism exists for constructed fields | proceed |
+| 2026-10-24 | E1 | H1, H2, H4 | H4 gate passed; **H1 falsified (opposite direction)**; H2 instrument failed | H1 closed; H2 re-instrumented |
+| 2026-10-24 | E2a | H2 | P3 failed (interpolation-limited) | superseded, not used |
+| 2026-10-24 | E2b | H2 | **H2 supported** in narrowed form; P2 refuted | proceed to E3 |
+| 2026-10-24 | E3 | curl-free parameterisation (post hoc) | running | — |

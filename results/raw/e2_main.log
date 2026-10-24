@@ -1,0 +1,41 @@
+integrating ground truth ...
+  energy-distance floor (two p1 samples) = -1.504e-03
+  energy distance Phi*#p0 vs p1          = -2.054e-03
+
+=== seed 0 ===
+  f = 0.1266  (decompose 5s)
+  integrated null   nfev=1190 (8s)
+  integrated grad   nfev=1748 (12s)
+  integrated recon  nfev=1736 (14s)
+  M_theta=0.0199  M_grad=0.0199  M_null=0.0097  M_recon=0.0220
+  recon validation: |Phi_recon - Phi_theta| = 0.00696 = 34.9% of M_theta  [P3 FAIL - interpolation untrustworthy]
+  theta : mean=0.0199 rms=0.0923 p99=0.1550 max=1.5052 | mode-flip=0.533% occTV=0.0023
+  grad  : mean=0.0199 rms=0.0963 p99=0.1780 max=1.4140 | mode-flip=0.633% occTV=0.0037
+  null  : mean=0.0097 rms=0.0672 p99=0.0639 max=1.3497 | mode-flip=0.300% occTV=0.0010
+  energy distance: floor=-1.504e-03 star=-2.054e-03 null=-2.070e-03 grad=-2.002e-03 theta=-1.999e-03
+
+=== seed 1 ===
+  f = 0.1761  (decompose 5s)
+  integrated null   nfev=1232 (8s)
+  integrated grad   nfev=1670 (12s)
+  integrated recon  nfev=1748 (14s)
+  M_theta=0.0231  M_grad=0.0200  M_null=0.0107  M_recon=0.0234
+  recon validation: |Phi_recon - Phi_theta| = 0.00448 = 19.4% of M_theta  [P3 OK]
+  theta : mean=0.0231 rms=0.1105 p99=0.3261 max=1.6194 | mode-flip=0.667% occTV=0.0037
+  grad  : mean=0.0200 rms=0.0945 p99=0.2298 max=1.5522 | mode-flip=0.467% occTV=0.0020
+  null  : mean=0.0107 rms=0.0723 p99=0.0706 max=1.4448 | mode-flip=0.333% occTV=0.0010
+  energy distance: floor=-1.504e-03 star=-2.054e-03 null=-2.052e-03 grad=-2.034e-03 theta=-2.059e-03
+
+=== seed 2 ===
+  f = 0.0920  (decompose 5s)
+  integrated null   nfev=1346 (9s)
+  integrated grad   nfev=1640 (11s)
+  integrated recon  nfev=1694 (13s)
+  M_theta=0.0185  M_grad=0.0175  M_null=0.0089  M_recon=0.0191
+  recon validation: |Phi_recon - Phi_theta| = 0.00525 = 28.3% of M_theta  [P3 FAIL - interpolation untrustworthy]
+  theta : mean=0.0185 rms=0.0808 p99=0.1566 max=1.5670 | mode-flip=0.400% occTV=0.0010
+  grad  : mean=0.0175 rms=0.0814 p99=0.1351 max=1.5657 | mode-flip=0.400% occTV=0.0013
+  null  : mean=0.0089 rms=0.0569 p99=0.0651 max=1.3390 | mode-flip=0.200% occTV=0.0010
+  energy distance: floor=-1.504e-03 star=-2.054e-03 null=-2.020e-03 grad=-2.051e-03 theta=-2.022e-03
+
+written: /workshop/src/../results/raw/e2_main/metrics.json
