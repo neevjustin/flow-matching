@@ -232,3 +232,59 @@ by the H1 mechanism, even though H1's aggregate prediction failed.
 
 **Next action.** E3 (curl-free parameterisation), the only remaining test of whether the
 measured circulation is actionable.
+
+---
+
+## E3 — Curl-free (potential) parameterisation as a controlled intervention
+
+**Date** 2026-10-24
+**Command** `python3.13 src/e3_curlfree.py --tag main --n-seeds 4 --steps 20000`
+**Raw** `results/raw/e3_main/`
+**Hypothesis** Post-hoc (declared in `src/e3_curlfree.py` before the run, but *not* in
+`hypothesis_ledger.md` §3 — flagged as post-hoc). Architecture is prior work.
+
+**Pre-registered predictions.** Q1 `f_pot < 0.01`; Q2 `η_rel` within 25 %; Q3 (primary)
+`M(pot) < M(base)`; Q4 the distributional discrepancy is *not* better for pot by more than
+its standard error.
+
+**RESULT (4 seeds per arm; matched width/depth/steps/batch/lr/seeds).**
+
+| | standard `v_θ` | curl-free `∇Ψ_θ` | Welch `p` |
+|---|---|---|---|
+| params | 37 890 | 37 761 | — |
+| `f` | 0.1334 ± 0.0347 | 5.49×10⁻⁵ ± 3.8×10⁻⁶ | 4.6×10⁻³ |
+| `η_rel` | 0.01682 ± 0.00087 | **0.01226 ± 0.00068** | 2.2×10⁻⁴ |
+| `M` | 0.02351 ± 0.00254 | **0.01432 ± 0.00080** | 3.4×10⁻³ |
+| `KL` | 0.0214 ± 0.0099 | **0.0082 ± 0.0018** | 0.073 |
+| `W₂` | 0.4062 ± 0.0077 | 0.4026 ± 0.0036 | 0.44 (noise-limited) |
+| `M/η_rel` | 1.400 ± 0.167 | **1.170 ± 0.070** | 0.064 |
+| wall-clock | 188 ± 4 s | 392 ± 4 s (**2.09×**) | 3.1×10⁻¹⁰ |
+
+**Verdicts against the pre-registered predictions.**
+* **Q1 OK** — `f_pot = 5.5×10⁻⁵`, confirming the implementation really is curl-free and
+  independently re-validating the `f` estimator (a field that is a gradient by
+  construction must read ≈ 0, and it does).
+* **Q2 FAILED** (27.1 % vs a 25 % bound) — but **in the favourable direction**: the
+  zero-bias restriction makes the network a *better* velocity regressor, not a worse one.
+  The prediction was written to guard against the restriction costing accuracy; that
+  concern was wrong.
+* **Q3 OK** — `M` reduced 39.1 % (`p = 3.4×10⁻³`).
+* **Q4 REFUTED** — `KL` also improves (0.0082 vs 0.0214, `p = 0.073`). The gain is *not*
+  specific to the map.
+
+**The confound, and the control.** Because `η_rel` improves by 27 %, the 39 % map-error
+reduction is **not** a clean isolation of "removing circulation". Controlling by the
+amplification ratio `M/η_rel` (per seed: velocity 1.230/1.528/1.284/1.557; potential
+1.177/1.208/1.069/1.225), the reduction is only **16.4 %** and marginal at four seeds
+(`p = 0.064`). So **~58 % of the map gain is explained by the better velocity fit and
+~42 % is specific to the geometry.** A clean test would hold `η` fixed across
+architectures (capacity or early-stopping matching); we did not run it. The comparison is
+matched on *steps*, not compute — the potential arm costs 2.09× wall-clock per step.
+
+**Interpretation.** The intervention works and is cheap to justify (zero bias, by Lemma 1),
+but this experiment does **not** establish that the benefit comes from eliminating
+circulation. It establishes that the restriction is beneficial overall, with a modest
+geometry-specific residual.
+
+**Next action.** Write-up. No further experiments warranted at this scale; the decisive
+remaining question (dimension dependence) exceeds the compute budget.

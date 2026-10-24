@@ -244,7 +244,50 @@ def fig5():
     print("fig5 done")
 
 
+
+
+# ------------------------------------------------------------------ figure 6
+def fig6():
+    d = json.load(open(os.path.join(RAW, "e3_main", "metrics.json")))
+
+    def col(a, k):
+        return np.array([r[k] for r in d["rows"] if r["arch"] == a], dtype=float)
+
+    panels = [
+        ("flux-null fraction $f$", "f", False),
+        ("velocity error $\\eta_{rel}$", "eta_rel", False),
+        ("map error $M$", "M", False),
+        ("amplification $M/\\eta_{rel}$", None, True),
+    ]
+    fig, axes = plt.subplots(1, 4, figsize=(10.6, 3.2))
+    rng = np.random.default_rng(1)
+    for ax, (title, key, ratio) in zip(axes, panels):
+        for i, (arch, c, lab) in enumerate([("velocity", S1, "standard\n$v_\\theta$"),
+                                            ("potential", S3, "curl-free\n$\\nabla\\Psi_\\theta$")]):
+            v = col(arch, "M") / col(arch, "eta_rel") if ratio else col(arch, key)
+            x = i + rng.uniform(-0.07, 0.07, v.size)
+            ax.scatter(x, v, s=28, color=c, zorder=3, edgecolor=SURF, linewidth=0.8)
+            ax.hlines(v.mean(), i - 0.24, i + 0.24, color=c, lw=2.4, zorder=4)
+        ax.set_xticks([0, 1])
+        ax.set_xticklabels(["standard\n$v_\\theta$", "curl-free\n$\\nabla\\Psi_\\theta$"],
+                           fontsize=8)
+        ax.set_xlim(-0.5, 1.5)
+        ax.set_title(title, fontsize=9, color=INK)
+        strip(ax)
+        if key == "f":
+            ax.set_yscale("log")
+    fig.suptitle("Curl-free parameterisation: better on every axis, but most of the map "
+                 "gain follows the better velocity fit\n"
+                 "4 seeds per arm, matched steps/width/depth; the potential arm costs "
+                 "2.1$\\times$ wall-clock per step",
+                 fontsize=9.5, color=INK, x=0.012, ha="left")
+    fig.tight_layout(rect=[0, 0, 1, 0.86])
+    fig.savefig(os.path.join(FIG, "fig6_curlfree.png"), bbox_inches="tight")
+    plt.close(fig)
+    print("fig6 done")
+
+
 if __name__ == "__main__":
-    which = sys.argv[1:] or ["1", "2", "3", "4", "5"]
+    which = sys.argv[1:] or ["1", "2", "3", "4", "5", "6"]
     for w in which:
-        {"1": fig1, "2": fig2, "3": fig3, "4": fig4, "5": fig5}[w]()
+        {"1": fig1, "2": fig2, "3": fig3, "4": fig4, "5": fig5, "6": fig6}[w]()

@@ -1,114 +1,118 @@
 # STATUS
 
-Last updated: 2026-10-24, during E1.
+Last updated: 2026-10-24, after E0 / E0b / E1 / E2a / E2b / E3. **All planned experiments
+complete.** Paper drafted.
 
-## Current research question
+## Current research question (final form)
 
-Original framing (from the brief) was **corrected twice**, both times because of what the
-literature and the mathematics actually say. Current question:
+> For a Gaussian base, independent coupling and a linear interpolant the CFM target field
+> `v*` is **exactly curl-free**, so the entire marginal-preserving (flux-null) subspace can
+> contain only error. **How much spurious circulation do trained CFM networks carry, is it
+> more or less than an unstructured field of the same smoothness, and what does it cost in
+> transport-map fidelity given that it is exactly invisible to every distributional metric?**
 
-> For a Gaussian base, independent coupling and a linear interpolant, the CFM target field
-> `v*` is **exactly curl-free** (`f(v*) = 0`), so the entire marginal-preserving (flux-null)
-> subspace can contain only error. **How much spurious circulation do trained CFM networks
-> contain, is it more or less than an unstructured field of the same smoothness, and what
-> does it cost in transport-map fidelity — given that it is exactly invisible to every
-> distributional metric?**
+The question moved twice from the brief's framing; both moves are documented in
+`hypothesis_ledger.md` §0 and §5. In short: (1) the CFM objective has a *unique* minimiser,
+so there is no gauge freedom to exploit — the freedom can only live in the residual; (2)
+that minimiser is itself a gradient field (**prior work**: Lim 2025 Example 5.1), so the
+null space is pure error with known correct value zero.
 
-### Why the question moved (recorded so the trail is auditable)
+## Strongest evidence
 
-1. **Correction 1 (literature + algebra).** The brief's premise was that learned models
-   might "exploit" the velocity-field freedom. But the CFM loss is a least-squares
-   regression whose minimiser is the unique conditional expectation, so **the objective has
-   no gauge freedom**. Non-uniqueness of the continuity equation is not non-uniqueness of
-   the loss. The freedom can only live in the residual `e = v_θ − v*`.
-2. **Correction 2 (our measurement, then traced to prior work).** We measured
-   `f(v*) = 0` to 8–29 significant figures on four datasets and derived
-   `v* = ∇[‖x‖²/(2t) + ((1−t)/t) log p_t]` via Tweedie, verified to `10⁻¹⁴`. **This is
-   already in the closest prior work** (Lim 2025, Example 5.1) and must not be claimed.
-   Its consequence, however, sharpens the question: a learned flux-null component is not an
-   alternative valid field, it is *spurious circulation with a known correct value of zero*.
-
-## Strongest evidence so far
-
-* **E0 (25/25 checks pass).** Testbed fully validated: closed-form `p_t`, `v*`, and loss
-  floor verified against Monte Carlo; continuity equation satisfied at observed order
-  1.99–2.00; Helmholtz solver exact (returns `f = 0`, `1`, `0.5` on constructed fields,
-  closure residual `~10⁻¹⁶`).
-* **E0/V10 — mechanism exists.** A constructed flux-null perturbation of amplitude **56 % of
-  ‖v*‖** leaves `W₂` at the sampling-noise floor while moving the transport map by
-  **26.6 % of the data radius**. Proof-of-concept that the blindness is real, *for
-  constructed fields*.
-* **E1 (5 of 8 seeds).** Trained CFM networks do contain spurious circulation:
-  `f = 0.133 ± 0.031` (seeds: 0.127, 0.176, 0.092, 0.139, 0.130), i.e. **~13 % of the
-  held-out velocity-error energy is in the flux-null subspace and is structurally
-  undetectable by any distributional metric**. Highly reproducible:
-  `η_rel = 0.0167 ± 0.0009`, `M = 0.0210 ± 0.0017`.
-* Grid stability of the primary metric is excellent: `f(192)` and `f(256)` agree to
-  6 decimal places.
-* Gronwall amplification along the true flow is modest: `C_G` median 1.22, p90 5.84 — so
-  map error is **not** predominantly an amplification artefact.
+1. **H1 FALSIFIED, in the direction opposite to the brief's hypothesis.**
+   `f = 0.1402 ± 0.0319` (8 seeds) against a matched null `f₀ = 0.7201 ± 0.0367`
+   (`p = 1.3×10⁻¹⁴`). Grid-free confirmation: `κ = 0.0304 ± 0.0041` vs `0.803 ± 0.336` at
+   random init, with `κ(v*) = 0` exactly. **Trained networks suppress the
+   marginal-preserving freedom ~5× in energy and ~26× in local rotationality, rather than
+   exploiting it.**
+2. **H4 gate passed decisively.** `M` changes by **0.01 %** between `rtol = 10⁻⁵` and
+   `10⁻⁹`. Not a solver artefact.
+3. **The residual circulation is invisible yet consequential (E2b, 3 seeds).** Injecting
+   the *measured* flux-null component into the true field: `|KL| ≤ 0.007` (instrument
+   validated to `7×10⁻⁸`, reads exactly 0 on the true field; full model's own KL = 0.018),
+   while `M = 0.0106 ± 0.0004` (0.27 % of the data radius), worst particle `1.70`
+   (42 % of it), and **0.31 % ± 0.04 % of samples re-routed to a different mode** at
+   essentially unchanged mode occupancy.
+4. **Localisation.** Spurious circulation forms radial spokes in the gaps *between* modes
+   and is near zero on them (fig 2); re-routed particles sit on the separatrices (fig 5).
+5. **Heavy tail.** Per-particle map error: median 0.009, p99 0.17, max 1.94; RMS/mean 4.4.
+6. **E3 curl-free parameterisation** is better on every axis (`η` −27 %, `M` −39 %,
+   `KL` −62 %) at 2.09× wall-clock — **but confounded**: controlling by `M/η`, the
+   map-specific gain is only −16 % (`p = 0.064`), so ~58 % of it follows from the better
+   velocity fit.
+7. **E0 validation gate: 25/25.** Continuity residual converges at observed order
+   1.99–2.00; decomposition orthogonal to `~10⁻¹⁶`; `f` recovers 0 / 1 / 0.5 exactly on
+   constructed fields.
 
 ## Main unresolved issues
 
-1. **The null level `f₀` is not yet measured** (running). Until it is, we cannot say whether
-   `f ≈ 0.13` is *more* or *less* circulation than chance. Current expectation: `f < f₀`,
-   which would mean networks **partially inherit** the target's curl-free structure — the
-   opposite of the brief's hypothesis, and a clean falsification of pre-registered H1.
-2. **Effect size may be practically small.** `f ≈ 0.13` and `C_G ≈ 1.2` imply the invisible
-   part of the map error is `~0.007` in absolute units, i.e. `~0.2 %` of the data radius.
-   Honest reporting requires saying so. Two things could still make it matter and are
-   being measured: the **per-particle tail** (the mean hides outliers) and the
-   **mode-assignment flip rate** (a discrete, interpretable sample-level failure that is
-   invisible to mode-occupancy statistics by construction).
-3. **`W₂` is unusable as H2's denominator.** At `n = 4000` in 2-D its two-sample noise floor
-   is 0.367 while `W₂(Φ*#p₀, p₁) = 0.387` — the ground-truth map itself cannot be
-   distinguished from a finite sample. Replaced by energy distance and exact CNF KL
-   (`src/sharp_metrics.py`). H1's metric and threshold are untouched.
-4. **Dimension.** The heuristic `f₀ ≈ (d−1)/d` predicts the blind fraction grows with
-   dimension, which would be the reason to care beyond 2-D. Untestable on this budget;
-   recorded as the headline open question.
+1. **Dimension — the headline open question.** The heuristic `f₀ ≈ (d−1)/d` suggests the
+   room for invisible error grows with `d` and is ≈ 1 for image models, but this is
+   untested and our 2-D finding could reverse. `κ` was built to make the test cheap
+   (`O(1)` per probe in any `d`, validated against the exact decomposition); we lacked the
+   compute to run it on an image model.
+2. **No mechanism for the suppression.** The CFM loss penalises both components *equally*
+   (orthogonality), so the asymmetry must come from the function class or optimiser.
+   Unproved either way.
+3. **Non-additivity** (`KL(Φ_∇φ) = 0.148`, 8× the full model's) forbids any
+   error-budget attribution of map error to the two components.
+4. **E3 is confounded** (see above); a clean test would match `η` across architectures.
+5. **Small mean effect.** 0.27 % of the data radius. The tail and the discrete mode-flip
+   failure are what look consequential, not the average.
 
 ## Experiments completed
 
 | ID | Purpose | Status |
 |---|---|---|
-| E0 | validation gate (25 checks) | **complete, all pass** |
-| E1 | pre-registered decisive run: `f` vs `f₀`, H2, H4 gate | running (5/8 seeds) |
-| E2 | re-inject *measured* Helmholtz components into the ODE | coded, queued |
-| E3 | curl-free potential parameterisation vs standard MLP | coded, queued |
+| E0 | validation gate, 25 checks | complete, all pass |
+| E0b | `f(v*) = 0` across 4 datasets; `v* = ∇Ψ*` to `1e-14` | complete |
+| E1 | pre-registered decisive run (H1, H2, H4 gate) | complete — **H1 falsified**, H4 passed |
+| E2a | re-injection, bilinear interpolation | **superseded** (P3 failed), retained on record |
+| E2b | re-injection, exactly-consistent spline split | complete — H2 supported in narrowed form |
+| E3 | curl-free parameterisation (post hoc) | complete — works, confounded |
 
 ## Next experiment and exact command
 
+No further experiment is warranted at this scale. The one that matters next requires a GPU:
+
 ```bash
-# 1. finish E1 (in flight)
-python3.13 src/e1_main.py --tag main --n-seeds 8 --steps 20000 --width 128
+# NOT RUN -- needs a GPU. Measure kappa on an image-scale flow-matching model
+# using the dimension-scalable Hutchinson estimator in src/evaluate.py
+# (curl_ratio_hutchinson), whose correct value is exactly 0.
+```
 
-# 2. E2 -- does the MEASURED flux-null component move the map while leaving the
-#    endpoint distribution at the noise floor?  (includes a Phi_recon validation
-#    of the interpolation, without which E2 means nothing)
-python3.13 src/e2_reinject.py --src e1_main --tag main --seeds 0 1 2
+Reproduce everything here on CPU:
 
-# 3. E3 -- does removing the circulation by construction buy map fidelity?
-python3.13 src/e3_curlfree.py --tag main --n-seeds 4 --steps 20000
+```bash
+python3.13 src/e0_validate.py
+python3.13 src/e1_main.py      --tag main --n-seeds 8 --steps 20000
+python3.13 src/e2b_reinject.py --src e1_main --tag main --seeds 0 1 2 --kl-steps 100
+python3.13 src/e3_curlfree.py  --tag main --n-seeds 4 --steps 20000
+python3.13 src/figures.py
 ```
 
 ## Budget
 
-* **Spent:** ~1.6 h wall-clock of the 2-core CPU. E0 ≈ 6 min; E1 ≈ 55 min (in flight);
-  literature review ≈ 10 full-text paper reads.
-* **Remaining plan:** E2 ≈ 15 min, E3 ≈ 50 min (potential arm costs ~3× per step),
-  multi-dataset replication ≈ 40 min. Total ≈ 2 h more.
-* No GPU used or needed. Largest memory footprint is the 192² sparse solve (~100 MB).
+* **Spent:** ~3.5 h wall-clock on 2 CPU cores. E0 ≈ 6 min, E1 ≈ 50 min, E2a ≈ 8 min,
+  E2b ≈ 20 min, E3 ≈ 40 min, figures ≈ 2 min; the rest is literature (10 papers read in
+  full text) and analysis.
+* **No GPU used.** Peak memory ~300 MB (the 256² sparse solve).
+* **Remaining:** the project is at a natural stopping point. Scaling to image models is the
+  next step and needs resources we do not have here.
 
-## Honest assessment of whether to continue
+## Honest assessment
 
-Continue, but with the contribution explicitly scoped **down** from the brief's framing.
+The brief's hypothesis is **false** in the standard CFM setting, and we can say so with a
+pre-registered test, a passed solver gate, a matched null, and two independent instruments.
 Two of the brief's three conceptual ingredients turned out to be published already (the
-flux-null subspace and the curl-freeness of `v*`, both in Lim 2025), and a third (the
-potential parameterisation) exists as an architecture (Action Matching, Energy Matching).
-What remains genuinely unmeasured — and is the only thing we may claim — is the
-**empirical geometry of trained networks' velocity error and its transport-map
-consequence**. Whether that clears a publication bar depends on E2/E3 effect sizes, which
-are not yet known. If E2 shows the invisible map error is negligible and E3 shows no
-improvement, the correct output is a **negative result**, and `paper/` should not be
-started.
+flux-null subspace and the curl-freeness of `v*`, both in Lim 2025); the third (potential
+parameterisation) exists as an architecture. **What is ours is the measurement and the
+instrument**, plus the negative result.
+
+That supports a short, honest paper (`paper/draft.md`) whose headline is a falsification
+plus a small, precisely-quantified invisible transport cost and a cheap diagnostic. It is
+not a strong paper, and the draft is written not to oversell it: the abstract states the
+falsification first, the limitations lead with "two dimensions only", and
+`paper/claims_and_evidence.md` lists every claim we explicitly do *not* make. Whether this
+clears a conference bar is a judgement call for the reader; we would submit it to a
+workshop rather than a main track.

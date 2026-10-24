@@ -16,3 +16,37 @@ ground truth map ...
   ed=-6.0701e-04 (floor 3.1075e-03, star -6.2124e-04)  w2=0.3982  KL=0.02475 +- 0.00845
 
 === arch=velocity seed=3 ===
+  params=37890  train=190s  eta_rel=0.0164  f=0.13895  M=0.02555
+  ed=-6.3266e-04 (floor 3.1075e-03, star -6.2124e-04)  w2=0.4111  KL=0.0096 +- 0.00469
+
+=== arch=potential seed=0 ===
+  params=37761  train=387s  eta_rel=0.0115  f=0.00006  M=0.01348
+  ed=-6.3138e-04 (floor 3.1075e-03, star -6.2124e-04)  w2=0.3991  KL=0.00635 +- 0.00303
+
+=== arch=potential seed=1 ===
+  params=37761  train=392s  eta_rel=0.0126  f=0.00005  M=0.01527
+  ed=-5.1400e-04 (floor 3.1075e-03, star -6.2124e-04)  w2=0.4052  KL=0.00958 +- 0.00364
+
+=== arch=potential seed=2 ===
+  params=37761  train=392s  eta_rel=0.0130  f=0.00006  M=0.01387
+  ed=-5.6369e-04 (floor 3.1075e-03, star -6.2124e-04)  w2=0.4061  KL=0.00989 +- 0.00486
+
+=== arch=potential seed=3 ===
+  params=37761  train=396s  eta_rel=0.0120  f=0.00005  M=0.01466
+  ed=-6.9143e-04 (floor 3.1075e-03, star -6.2124e-04)  w2=0.3999  KL=0.00693 +- 0.00399
+
+================ E3 COMPARISON ================
+eta_rel    velocity 0.016824 +- 0.000868 | potential 0.012261 +- 0.000681 | Welch p=2.249e-04
+f          velocity 0.13342 +- 0.0347 | potential 5.4935e-05 +- 3.84e-06 | Welch p=4.587e-03
+M          velocity 0.023506 +- 0.00254 | potential 0.014319 +- 0.000799 | Welch p=3.420e-03
+ed         velocity -0.00056811 +- 0.000123 | potential -0.00060013 +- 7.76e-05 | Welch p=6.777e-01
+w2         velocity 0.40618 +- 0.00774 | potential 0.40256 +- 0.0036 | Welch p=4.407e-01
+kl         velocity 0.021413 +- 0.00991 | potential 0.0081874 +- 0.00181 | Welch p=7.346e-02
+t_train    velocity 187.83 +- 3.76 | potential 391.93 +- 3.65 | Welch p=3.067e-10
+
+Verdict against pre-registered predictions:
+  Q1 f_pot ~ 0            : f_pot=5.49e-05  OK
+  Q2 eta within 25%       : rel diff 27.1%  FAIL
+  Q3 M(pot) < M(base)     : 0.01432 vs 0.02351  OK  (p=3.420e-03)
+
+written: /workshop/src/../results/raw/e3_main/metrics.json
