@@ -98,6 +98,17 @@ class FaceGrid:
         return np.stack([self.centres[ii.ravel()], self.centres[jj.ravel()]], axis=1)
 
 
+def active_masks(grid, p_cell, tol_density=1e-8):
+    """Return (active_cell, active_face) using the same rule as ``decompose``.
+
+    Exposed so callers can evaluate an expensive field (e.g. a network) only on
+    the faces that will actually be used, instead of all of them.
+    """
+    thr = tol_density * float(p_cell.max())
+    act_cell = p_cell >= thr
+    return act_cell, act_cell[grid.face_A] & act_cell[grid.face_B]
+
+
 def decompose(grid, p_face, e_face, p_cell, tol_density=1e-8, solver="direct"):
     """Decompose a face-sampled field.
 

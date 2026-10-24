@@ -113,7 +113,75 @@ of the error field, and its spectrum. **We therefore do not assume `f_0 = 1/2`; 
 `f_0` from a matched null model** (same architecture at random init, rescaled to the same
 norm, same decomposition operator). (5) is used only as a sanity reference.
 
-### 2.4 Five distinctions that must not be collapsed
+### 2.4 The CFM target is curl-free — so the entire flux-null subspace is error
+
+**This is the single most consequential fact we found, and it is NOT ours.**
+
+For a Gaussian base `p_0 = N(0,I)`, independent coupling and the linear interpolant,
+`x_t | x_1 ~ N(t x_1, (1−t)² I)`, so `p_t` is a Gaussian convolution and Tweedie's formula
+gives `E[x_0 | x_t = x] = −(1−t) ∇log p_t(x)`. Then
+`E[x_1 | x_t = x] = (x + (1−t)² ∇log p_t)/t`, and
+
+    v*(t,x) = E[x_1 − x_0 | x_t = x] = (1/t) [ x + (1−t) ∇log p_t(x) ]
+            = ∇_x Ψ*_t(x) ,    Ψ*_t(x) = ‖x‖²/(2t) + ((1−t)/t) log p_t(x) .   (6')
+
+**So the CFM marginal velocity field is exactly a gradient field: `f(v*) = 0`.**
+
+**[ESTABLISHED — prior work.]** The velocity–score relation is standard
+[lipman2022flowmatching; albergo2022stochastic]. Crucially, **the closest prior work already
+states the gradient conclusion**: [lim2025hiddenbiases] Example 5.1 gives, for independent
+coupling, "the population regression minimizer … `= ∇_z Φ(t,z)`", together with
+`∇_z log p_t(z) = (t/(1−t)) v(t,z) − z/(1−t)`, which rearranges to exactly (6'). **We must
+not claim this.** We verified it numerically to `10⁻¹⁴` (autograd of `Ψ*` vs closed-form
+`v*`, four datasets, five times each) and measured `f(v*) = 4×10⁻⁸ … 1×10⁻²⁹` with our
+decomposition operator — which doubles as an independent validation of the solver against a
+published theoretical prediction.
+
+**Scope and a clarification of prior work.** Tweedie's formula requires the *source* to be
+Gaussian. [lim2025hiddenbiases] Prop. 5.3 states that the empirical minimiser is a gradient
+field iff `Σ_i (v_i ∇w_iᵀ − ∇w_i v_iᵀ) = 0`, and remarks that this "is not expected to hold
+except in special symmetric or degenerate configurations". We confirmed (targeted re-read)
+that Prop. 5.3 is stated for **general affine conditional flows with a latent `Z ~ Q`,
+"not necessarily Gaussian"**. For the Gaussian-source linear interpolant — the standard CFM
+setting — the same Tweedie argument applies to the *empirical* `p̂_t` (still a Gaussian
+convolution), so `v̂*` **is** a gradient field, and the genericity remark does not bite.
+**[DERIVED]** We verified this numerically on a 48-component mixture with `σ = 0.12`
+(`f = 1×10⁻⁶`). This is a scope clarification of prior work, not a contribution.
+
+**Why this reframes the project.** Writing `v_θ = v* + e` and decomposing
+`e = ∇φ + r`, the fact `f(v*) = 0` means
+
+    r(e) = r(v_θ) :  the flux-null component of the ERROR is the flux-null
+                     component of the LEARNED FIELD ITSELF.                 (6'')
+
+So a learned flux-null component is not a legitimate alternative choice of field — it is
+**spurious circulation that the true field does not possess**. It is:
+* exactly invisible to every distributional metric (§3.2),
+* fully active on trajectories and the transport map (§3.2),
+* pure error, with a known correct value of zero.
+
+The project's question therefore sharpens from *"which flux-equivalent field did the model
+pick?"* (ill-posed: the minimiser is unique **and** is a gradient) to:
+
+> **How much spurious circulation do trained CFM networks contain, is it more or less than
+> an unstructured field would have, and what does it cost in transport-map fidelity?**
+
+The reference level is now **exact (`f = 0`)** rather than a heuristic null. The matched
+null `f_0` retains a different and still useful role: it says how much circulation an
+*unstructured* field of the same smoothness would show, so `f < f_0` would mean the network
+partially inherits the target's curl-free structure, and `f > f_0` would mean it does worse
+than chance.
+
+**Immediate methodological consequence (tested in E3).** Since `v*` is exactly a gradient,
+parameterising `v_θ = ∇_x Ψ_θ(t,x)` is a **zero-bias** restriction that removes the
+flux-null subspace by construction. Note this architecture is **not new**: Action Matching
+learns `v = ∇s_t`, and Energy Matching [see literature_matrix.md] uses a time-independent
+potential motivated by OT heuristics ("any rotational component would add unnecessary
+distance"), explicitly *not* by (6'). Neither validates irrotationality empirically nor
+measures transport-map fidelity. Our contribution can only be the **measurement and its
+consequence**, never the architecture.
+
+### 2.5 Five distinctions that must not be collapsed
 
 | Equal … | does **not** imply equal … | why |
 |---|---|---|
