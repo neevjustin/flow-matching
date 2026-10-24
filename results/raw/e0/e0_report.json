@@ -1,0 +1,128 @@
+{
+  "V1_mass_t0.0": {
+    "status": "PASS",
+    "detail": "integral(p_t) = 1.00000000"
+  },
+  "V1_mass_t0.25": {
+    "status": "PASS",
+    "detail": "integral(p_t) = 1.00000000"
+  },
+  "V1_mass_t0.5": {
+    "status": "PASS",
+    "detail": "integral(p_t) = 1.00000000"
+  },
+  "V1_mass_t0.75": {
+    "status": "PASS",
+    "detail": "integral(p_t) = 1.00000000"
+  },
+  "V1_mass_t1.0": {
+    "status": "PASS",
+    "detail": "integral(p_t) = 1.00000000"
+  },
+  "V2_t0.1": {
+    "status": "PASS",
+    "detail": "max |E[res*g]| z-score = 2.43 (lin)"
+  },
+  "V3_t0.1": {
+    "status": "PASS",
+    "detail": "MC floor 18.159636 vs closed form 18.159519 (rel 6.48e-06)"
+  },
+  "V2_t0.35": {
+    "status": "PASS",
+    "detail": "max |E[res*g]| z-score = 2.16 (const)"
+  },
+  "V3_t0.35": {
+    "status": "PASS",
+    "detail": "MC floor 9.240765 vs closed form 9.232131 (rel 9.35e-04)"
+  },
+  "V2_t0.6": {
+    "status": "PASS",
+    "detail": "max |E[res*g]| z-score = 3.16 (sin)"
+  },
+  "V3_t0.6": {
+    "status": "PASS",
+    "detail": "MC floor 2.039132 vs closed form 2.046326 (rel 3.52e-03)"
+  },
+  "V2_t0.85": {
+    "status": "PASS",
+    "detail": "max |E[res*g]| z-score = 1.61 (lin)"
+  },
+  "V3_t0.85": {
+    "status": "PASS",
+    "detail": "MC floor 2.053803 vs closed form 2.056781 (rel 1.45e-03)"
+  },
+  "V4_t0.2": {
+    "status": "PASS",
+    "detail": "L2 rel residual 4.45e-03 -> 1.11e-03 -> 2.79e-04; observed order 2.00, 2.00 (design 2)"
+  },
+  "V4_t0.5": {
+    "status": "PASS",
+    "detail": "L2 rel residual 8.05e-03 -> 2.02e-03 -> 5.05e-04; observed order 2.00, 2.00 (design 2)"
+  },
+  "V4_t0.8": {
+    "status": "PASS",
+    "detail": "L2 rel residual 2.31e-02 -> 5.83e-03 -> 1.46e-03; observed order 1.99, 2.00 (design 2)"
+  },
+  "V5_transport": {
+    "status": "PASS",
+    "detail": "W2(Phi*#p0, p1) = 0.2686 vs same-n noise floor 0.3291 (ratio 0.816); nfev=590, 3.8s"
+  },
+  "V6_N128": {
+    "status": "PASS",
+    "detail": "pure gradient -> f = 0.00000 (ortho 4.33e-10, closure 1.33e-14)"
+  },
+  "V7_N128": {
+    "status": "PASS",
+    "detail": "pure flux-null -> f = 0.99999 (ortho 0.00e+00, closure 0.00e+00)"
+  },
+  "V8_N128": {
+    "status": "PASS",
+    "detail": "equal-energy mixture -> f = 0.50000 (expect 0.500)"
+  },
+  "V6_N192": {
+    "status": "PASS",
+    "detail": "pure gradient -> f = 0.00000 (ortho 9.73e-10, closure 1.31e-14)"
+  },
+  "V7_N192": {
+    "status": "PASS",
+    "detail": "pure flux-null -> f = 1.00000 (ortho 0.00e+00, closure 0.00e+00)"
+  },
+  "V8_N192": {
+    "status": "PASS",
+    "detail": "equal-energy mixture -> f = 0.50000 (expect 0.500)"
+  },
+  "V9_refine": {
+    "status": "PASS",
+    "detail": "f(192)=0.14867 f(256)=0.14867 |diff|=1.02e-07"
+  },
+  "V9_tol": {
+    "status": "PASS",
+    "detail": "f spread over tol_density = 6.56e-07"
+  },
+  "V10_marginal_preserved": {
+    "status": "PASS",
+    "detail": "W2(Phi_pert#p0, p1) = 0.3194 vs floor 0.3291 (unperturbed 0.2686)"
+  },
+  "V10_map_changed": {
+    "status": "PASS",
+    "detail": "mean |Phi_pert - Phi*| = 1.0656 = 26.6% of data radius; perturbation is 56.0% of ||v*||"
+  },
+  "V10_numbers": {
+    "w2_unperturbed": 0.2686344552466597,
+    "w2_perturbed": 0.31940317715659783,
+    "w2_floor": 0.3290709958108192,
+    "map_shift": 1.065558865270392,
+    "data_scale": 4.012325858027865,
+    "rel_amplitude": 0.5604555921292199
+  },
+  "V9_refine_values": {
+    "128": 0.14867244010793892,
+    "192": 0.14867305093599778,
+    "256": 0.14867315321501398
+  },
+  "V9_tol_values": {
+    "1e-06": 0.14867240094918893,
+    "1e-08": 0.14867305093599778,
+    "1e-10": 0.14867305702405922
+  }
+}
