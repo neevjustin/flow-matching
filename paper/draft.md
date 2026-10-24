@@ -284,7 +284,7 @@ of the data radius — the phenomenon exists in this testbed before any network 
 
 Trajectory differences could be integrator error rather than field error. They are not.
 Across `rtol ∈ \{10^{-5}, 10^{-7}, 10^{-9}\}` (DOP853), the map error and the between-seed
-map disagreement each change by **0.01 %** (`M`: `0.01966 → 0.01966`). Our pre-declared
+map disagreement each change by **less than 0.01 %** (measured 0.0068 %) (`M`: `0.01966 → 0.01966`). Our pre-declared
 refutation threshold was 10 %. Separately, the Gronwall amplification along the true flow
 is modest — `C_G` median `1.22`, mean `3.47`, p90 `5.84` — so map error is not
 predominantly an amplification effect.
@@ -344,7 +344,7 @@ flux-null fraction of the spline split matches the grid value to `≤ 0.003` on 
 | field injected into `v^*` | `M` | p99 | max | mode-flip | occupancy TV | `KL(p̂_1\|p_1)` |
 |---|---|---|---|---|---|---|
 | — (`Φ^*`, ground truth) | 0 | — | — | 0 | 0 | **0.00000 ± 0.00000** |
-| **flux-null part `r` only** | **0.0106 ± 0.0004** | 0.060–0.077 | 1.39–1.70 | **0.31 % ± 0.04 %** | 0.0013–0.0017 | **−0.0046 ± 0.0021** |
+| **flux-null part `r` only** | **0.0106 ± 0.0004** | 0.060–0.077 | 1.39–1.70 | **0.31 % ± 0.04 %** | 0.0013–0.0017 | **−0.0045 ± 0.0021** |
 | full error `e` (i.e. `v_θ`) | 0.0205 ± 0.0024 | 0.155–0.326 | 1.51–1.62 | 0.53 % | 0.0010–0.0037 | 0.0183 ± 0.0035 |
 | gradient part `∇φ` only | 0.0188 ± 0.0021 | 0.135–0.302 | 1.48–1.53 | 0.50 % | 0.0020–0.0033 | 0.1479 ± 0.0247 |
 

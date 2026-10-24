@@ -25,7 +25,7 @@ null space is pure error with known correct value zero.
    random init, with `κ(v*) = 0` exactly. **Trained networks suppress the
    marginal-preserving freedom ~5× in energy and ~26× in local rotationality, rather than
    exploiting it.**
-2. **H4 gate passed decisively.** `M` changes by **0.01 %** between `rtol = 10⁻⁵` and
+2. **H4 gate passed decisively.** `M` changes by **<0.01 %** between `rtol = 10⁻⁵` and
    `10⁻⁹`. Not a solver artefact.
 3. **The residual circulation is invisible yet consequential (E2b, 3 seeds).** Injecting
    the *measured* flux-null component into the true field: `|KL| ≤ 0.007` (instrument
